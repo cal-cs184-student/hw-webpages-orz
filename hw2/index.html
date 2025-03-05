@@ -28,19 +28,19 @@
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2025 Homework 2 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Owen Zou</div>
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to webpage: (TODO) <a href="https://cal-cs184-student.github.io/hw-webpages-orz/">cal-cs184-student.github.io/hw-webpages-orz/</a>
 
 		<br>
 		
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to GitHub repository: (TODO) <a href="https://github.com/cal-cs184-student/hw-webpages-orz">github.com/cal-cs184-student/hw-webpages-orz</a>
 
 		<figure>
 			<img src="teapot.png" alt="Teapot" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
+			<figcaption>This is a only a teapot</figcaption>
 		</figure>
 
 		<!--
@@ -48,69 +48,233 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		This homework discusses the idea and theorem behind the 3D models on our computer like Bezier Curves, Bezier surfaces, and meshes. It fomulated the visualized graphics to controllable mathematics variables, helping us to do research with them in a more efficient and scientific way.
 
 		<h2>Section I: Bezier Curves and Surfaces</h2>
 
 		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+		De Casteljau algorithm is a recursive method used to calculate any point on a Bezier curves by repeatedly performing linear interpolations between the control points. Initially, with control points P0, P1, P2.....Pn, this algorithm connect the consecutive points to create the control polygon of the curve. Then, subdivide each line segment of this polygon with the ratio t:(1-t) and connect the points to arrive at the new polygon having one fewer segment. Repeat this process until we arrive at the single point, which is the point of the curve corresponding to the parameter t.
+		<p> Back to the program implementation, cause the requirement tells us that we should only evaluate one step of the de Casteljau's algorithm. So I only write a base case returning when points.size() equal to 1 and a for loop to subdivide them according to the formula P'i = (1-t)pi + t*p_i+1
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="q1_step0.png" width="400px"/>
+				  <figcaption>6 control points at step 0</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="q1_step1.png" width="400px"/>
+				  <figcaption>6 control points at step 1</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="q1_step2.png" width="400px"/>
+				  <figcaption>6 control points at step 2</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="q1_step3.png" width="400px"/>
+				  <figcaption>6 control points at step 3</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="q1_step4.png" width="400px"/>
+				  <figcaption>6 control points at step 4</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="q1_step5.png" width="400px"/>
+				  <figcaption>6 control points at step 5</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="q1_step6.png" width="400px"/>
+				  <figcaption>6 control points with completed Bezier curve</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="q1_step7.png" width="400px"/>
+				  <figcaption>6 control points after moving orginal control points and modifying the parameter t</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
 
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		We can apply the same recursive process to a matrix of the control points by performing it twice. Firstly, we can apply the De Casteljau algorithm with parameter u for each row. Then we can get a column with the number of rows's single point. Next step, we can apply the De Casteljau algorithm to the column with the parameter v. Then, we can get a single point on Bezier surface with (u, v).
+		<p> As for implementation, firstly I take the Q1's program to complete the evaluateStep. Then I set a while to compelete the subdivision steps for a row to form a single point. The last step, I call evaluate1D for all rows and call that again for what remaining in columns to get the point.
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table>
+			<tr>
+			<td style="text-align: center;">
+				<img src="q2.png" width="400px"/>
+				<figcaption>Bezier Surface teapot</figcaption>
+			  </td>
+			</tr>
+		  </table>
+	  </div>
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 		<h3>Part 3: Area-weighted vertex normals</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+	  	For this question, one difficulty I encountered is how to show the area of triangles or related it with vertex. Then, I discovered that the cross product of two vector which can be shown in vertex here can represent the area of parallelogams this two vector formed. The area of parallelogams can be regarded as the twice of the area of the triangle. Since we want to find the area-weighted average of the normals. We only need the ratio between different area so we don't need to divide them by 2. Sum the cross product together and divide the norm of it, so we can get the final result.
+		  <div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="q3_before.png" width="400px"/>
+				  <figcaption>before applying normal</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="q3_after.png" width="400px"/>
+				  <figcaption>after applying normal</figcaption>
+				</td>
+			  </tr>
+			</table>
+		 </div>
 		<h3>Part 4: Edge flip</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		<p> I spent almost 2 hours on this problem because I could not find a valid method to access all vertex, edges, faces, and halfedges until I find the resources of correctly implementing edge flip/split/collapse. According to the image of before flip and after flip on guide, I successfully extract all required element from e0 and begin to reassign pointers according to the after flip image's guide. I succeed in one time because of the correctness of the graph labeled on after flip image. We should reassign all halfedges, all edges, all vertices, and all faces. Fortunately, due to no add or delete mesh, we only need to improve the halfedges and set the new halfedges to edges, vertices, and faces here. changing the vertex of h0 to v3 and its twins to v2. Then update the face and vertex's halfedge. All done. By the way, if e0->isboundary() is true, we will return immediately.
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				  <tr>
+					<td style="text-align: center;">
+					  <img src="q4_before.png" width="400px"/>
+					  <figcaption>before applying filp edge</figcaption>
+					</td>
+					<td style="text-align: center;">
+					  <img src="q4_after.png" width="400px"/>
+					  <figcaption>after applying flip edge</figcaption>
+					</td>
+				  </tr>
+				</table>
+			 </div>
 		<h3>Part 5: Edge split</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		<p> For the common situation, we should add a new vertex v4 in the middle of the parallelogam, which divids the original edge e0 to e0 and e7. Add another two edges e5, e6, connect v3 to v4 and v4 to v2. There are 6 added new halfedges: h10 and h13 (the halfedge from v4 to v1 or v1 to v4) the other four (halfedges and twins on e5 and e6). The original faces are also divided to 4 faces f0, f1, f2, f3. After knowing all the updated vertices, edges, halfedges, and faces, we can reassign the pointers. For convenient of next problem, we assign e->isNew of e5 and e6 to true. There is no trick when implemented this problem. As long as the guide image after the split we labeled is correct, we can get the correct answer easily.
+		<p> Extra credit: For the boundary situation, we should add a new vertex v3 in the middle of the e0 and connect it to v2. Then there are one new edge e4 and one divided edge e3. There are four new halfedges (the halfedge and twin around e3 and e4). The original face is divided to f0 and f1. Note that the twin of e0 and e3's face is still null pointer to maintain them as the boundary.
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="q5_before.png" width="400px"/>
+				  <figcaption>before applying any operation</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="q5_s.png" width="400px"/>
+				  <figcaption>after applying split edge</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="q5_before.png" width="400px"/>
+				  <figcaption>before applying any operation</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="q5_sf.png" width="400px"/>
+				  <figcaption>after applying flip edge and split edge</figcaption>
+				</td>
+			  </tr>
+			</table>
+			<tr>
+				<td style="text-align: center;">
+				  <img src="beetle_before.png" width="400px"/>
+				  <figcaption>before applying split edge on boundary edge</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="beetle_after.png" width="400px"/>
+				  <figcaption>after applying split edge on boundary edge</figcaption>
+				</td>
+			  </tr>
+			</table>
+		 </div>
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
+		<p> Since we follow the guide material provided. so our first step is to compute the new position of the vertices for the original vertices. If the vertices connected to the vertex equal to 3, it will be calculated as (1 - n * u) * original_position + u * original_neighbor_position_sum where n = number of neighbor, u = 3/16. Else, it will be calculated with the same formula, but u = 3/(8n).
+		<p> Step2: compute the new position for point insert to edge. The formula is easy to see 3/8 * (A + B) + 1/8 * (C + D). What should we do is just to iterate all A, B, C, and D to calculate them and insert it in.
+		<p> Step3-5: we will split all original edges, and then flip the edges whose vertex and its twin vertex has 1 new point and 1 old point. Then use the v->newposition to recover v->position for all vertex v.
+		<p> It is not difficult to discover that the sharps corners and edges will become much more smooth and not as straight and sharp as before. We can pre-split edges near sharp corners and stright edge with higher density so that their trait can be preserved in some perspective after the subdivision.
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="ico_sample1.png" width="400px"/>
+				  <figcaption>ico before upsample</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="ico_sample2.png" width="400px"/>
+				  <figcaption>ico upsample 1 time</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="ico_sample3.png" width="400px"/>
+				  <figcaption>ico upsample 2 time</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="ico_sample4.png" width="400px"/>
+				  <figcaption>ico upsample 3 time</figcaption>
+				</td>
+			  </tr>
+			<tr>
+				<td style="text-align: center;">
+				  <img src="torus_sample1.png" width="400px"/>
+				  <figcaption>torus before upsample</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="torus_sample2.png" width="400px"/>
+				  <figcaption>torus upsample 1 time</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="torus_sample3.png" width="400px"/>
+				  <figcaption>torus upsample 2 time</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="torus_sample4.png" width="400px"/>
+				  <figcaption>torus upsample 3 time</figcaption>
+				</td>
+			  </tr>
+			</table>
+		 </div>
+		<p> It is not difficult to discover that the cuber before pre-split becomes asymmetric and the cube after pre-split becomes symmetric after upsample. This can be explained by the preservation symmetry of loop subdivisions. Although the original cube seems like a symmetric one, it has only one diagonal per face, meaning that it could not be symmetric in any axis. Then, this asymmetric property is preserved by the upsample and we see the asymmetric result as the image2.
+		<p> After I add the another diagonal of each face. It becomes symmetric. Then, the cube after upsample is also symmetric.
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				  <tr>
+					<td style="text-align: center;">
+					  <img src="cube_before.png" width="400px"/>
+					  <figcaption>cube before pre-split</figcaption>
+					</td>
+					<td style="text-align: center;">
+					  <img src="cube_before_sample1.png" width="400px"/>
+					  <figcaption>cube before pre-split upsample 2 times</figcaption>
+					</td>
+				  </tr>
+				  <tr>
+					<td style="text-align: center;">
+					  <img src="cube_after.png" width="400px"/>
+					  <figcaption>cube after pre-split</figcaption>
+					</td>
+					<td style="text-align: center;">
+					  <img src="cube_sample2.png" width="400px"/>
+					  <figcaption>cube after pre-split upsample 2 times</figcaption>
+					</td>
+				  </tr>
+				</table>
+			</div>
+		<p> Extra credit: The situation for boundary. We should only add the case of boundary in two steps, step 1 and step 2. For new vertex position, if the neighbor of the vertex equal to 2, we will calculate the new position as 3/4 original position + 1/8(two neighbor's position). Otherwise, the new position is the same as the original position. For edge's new position to insert, we will calculate the middle point of this edge. After these cases added, the upsample function can deal with the boundary situation now.
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				  <tr>
+					<td style="text-align: center;">
+					  <img src="beetle_before_sample.png" width="400px"/>
+					  <figcaption>beetle before upsample</figcaption>
+					</td>
+					<td style="text-align: center;">
+					  <img src="beetle_after_sample.png" width="400px"/>
+					  <figcaption>beetle after upsample</figcaption>
+					</td>
+				  </tr>
+				</table>
+			 </div>
 		</div>
 	</body>
 </html>
